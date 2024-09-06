@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bookRoutes = require('./routes/book');
+const userRoutes = require('./routes/user');
 
 mongoose
 	.connect(
@@ -23,41 +25,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.get("/api/books", (req, res, next) => {
-	const books = [
-		{
-			id: "oeihfzeoi",
-			userId: "1235",
-			title: "Mon premier livre",
-			author: "auteur",
-			year: 2015,
-			imageUrl:
-				"https://www.cfpp-colmar.fr/wp-content/uploads/2020/10/banque-d-images-gratuites-libres-de-droits46-1560x1040-1.jpg",
-			genre: "genre",
-			ratings: 0,
-			averageRating: 4,
-		},
-		{
-			id: "oeihfzeomoihi",
-			userId: "1234",
-			title: "Mon deuxième livre",
-			author: "auteur",
-			year: 2010,
-			imageUrl:
-				"https://www.cfpp-colmar.fr/wp-content/uploads/2020/10/banque-d-images-gratuites-libres-de-droits46-1560x1040-1.jpg",
-			genre: "genre",
-			ratings: 0,
-			averageRating: 1,
-		},
-	];
-	res.status(200).json(books);
-});
-
-app.post("/api/stuff", (req, res, next) => {
-	console.log(req.body);
-	res.status(201).json({
-		message: "Livre créé !",
-	});
-});
+app.use('/api/books', bookRoutes);
+app.use('/api/auth', userRoutes);
 
 module.exports = app;
