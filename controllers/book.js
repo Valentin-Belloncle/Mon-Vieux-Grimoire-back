@@ -5,10 +5,7 @@ exports.getAllBooks = async (req, res, next) => {
 		const books = await Book.find();
 		res.status(200).json(books);
 	} catch (error) {
-		res.status(400).json({
-			message: "Données non valides.",
-			error: error.message,
-		});
+		res.status(500).json({ error });
 	}
 };
 
@@ -21,10 +18,7 @@ exports.createOneBook = async (req, res, next) => {
 		await book.save();
 		res.status(201).json({ message: "Livre enregistré !" });
 	} catch (error) {
-		res.status(400).json({
-			message: "Données non valides.",
-			error: error.message,
-		});
+		res.status(500).json({ error });
 	}
 };
 
@@ -36,10 +30,7 @@ exports.getBestBooks = async (req, res, next) => {
 			.exec();
 		res.status(200).json(bestBooks);
 	} catch (error) {
-		res.status(400).json({
-			message: "Données non valides.",
-			error: error.message,
-		});
+		res.status(400).json({ error });
 	}
 };
 
@@ -48,10 +39,7 @@ exports.getOneBook = async (req, res, next) => {
 		const book = await Book.findOne({ _id: req.params.id });
 		res.status(200).json(book);
 	} catch (error) {
-		res.status(400).json({
-			message: "Données non valides.",
-			error: error.message,
-		});
+		res.status(500).json({ error });
 	}
 };
 
@@ -63,10 +51,7 @@ exports.modifyOneBook = async (req, res, next) => {
 		);
 		res.status(200).json({ message: "Livre modifié !" });
 	} catch (error) {
-		res.status(400).json({
-			message: "Données non valides.",
-			error: error.message,
-		});
+		res.status(500).json({ error });
 	}
 };
 
@@ -75,9 +60,6 @@ exports.deleteOneBook = async (req, res, next) => {
 		const book = await Book.deleteOne({ _id: req.params.id });
 		res.status(200).json({ message: "Livre supprimé !" });
 	} catch (error) {
-		res.status(400).json({
-			message: "Données non valides.",
-			error: error.message,
-		});
+		res.status(500).json({ error });
 	}
 };

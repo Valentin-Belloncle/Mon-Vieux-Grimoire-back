@@ -1,40 +1,19 @@
 const mongoose = require("mongoose");
 
 const bookSchema = mongoose.Schema({
-    userId: { type: String, required: false },
+	userId: { type: String, required: false },
 	title: { type: String, required: true },
-    author: { type: String, required: true },
-    year: { type: Number, required: false },
+	author: { type: String, required: true },
+	year: { type: Number, required: false },
 	imageUrl: { type: String, required: true },
-    genre: { type: String, required: false },
+	genre: { type: String, required: false },
+	ratings: [
+		{
+			userId: { type: String, required: false },
+			grade: { type: Number, require: false },
+		},
+	],
 	averageRating: { type: Number, required: false },
 });
-
-// const books = [
-//     {
-//         id: "oeihfzeoi",
-//         userId: "1235",
-//         title: "Mon premier livre",
-//         author: "auteur",
-//         year: 2015,
-//         imageUrl:
-//             "https://www.cfpp-colmar.fr/wp-content/uploads/2020/10/banque-d-images-gratuites-libres-de-droits46-1560x1040-1.jpg",
-//         genre: "genre",
-//         ratings: 0,
-//         averageRating: 4,
-//     },
-//     {
-//         id: "oeihfzeomoihi",
-//         userId: "1234",
-//         title: "Mon deuxième livre",
-//         author: "auteur",
-//         year: 2010,
-//         imageUrl:
-//             "https://www.cfpp-colmar.fr/wp-content/uploads/2020/10/banque-d-images-gratuites-libres-de-droits46-1560x1040-1.jpg",
-//         genre: "genre",
-//         ratings: 0,
-//         averageRating: 1,
-//     },
-// ];
 
 module.exports = mongoose.model("Book", bookSchema);
