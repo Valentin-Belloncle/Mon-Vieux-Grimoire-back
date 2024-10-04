@@ -4,7 +4,18 @@ const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res, next) => {
 	try {
+		// Vérification du format de l'email
+		const email = req.body.email;
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+		if (!email || !emailRegex.test(email)) {
+			return res.status(400).json({ error: "Adresse email invalide." });
+		}
+		
+		//Cryptage mot de passe
 		const hash = await bcrypt.hash(req.body.password, 10);
+
+		//Envoie en base de donnée
 		const user = new User({
 			email: req.body.email,
 			password: hash,

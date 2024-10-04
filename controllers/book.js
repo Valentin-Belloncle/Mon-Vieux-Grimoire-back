@@ -54,29 +54,41 @@ exports.getOneBook = async (req, res, next) => {
 
 exports.modifyOneBook = async (req, res, next) => {
 	try {
-		const bookId = req.params.id;
-
-		//Vérification de la présence d'un fichier image
-		const bookData = req.file
-			? {
-					...JSON.parse(req.body.book),
-					imageUrl: `${req.protocol}://${req.get("host")}/images/${
-						req.file.filename
-					}`,
-			  }
-			: { ...req.body };
-
-		delete bookData._userId;
-
-		//Modification du livre et renvoie du livre modifié en réponse
-		const updatedBook = await Book.findByIdAndUpdate(bookId, bookData, {
-			new: true,
-		});
-		if (!updatedBook) {
+		const book = await Book.findOne({ _id: req.params.id });
+		if (!book) {
 			return res.status(404).json({ error: "Livre non trouvé." });
 		}
 
-		res.status(200).json({ message: "Livre modifié !" });
+		// Suppression de l'ancienne image si une nouvelle est envoyée
+		let bookData;
+		if (req.file) {
+			const oldImagePath = book.imageUrl.split("/images/")[1];
+			fs.unlink(
+				path.join(__dirname, "../images", oldImagePath),
+				(err) => {
+					if (err) {
+						console.error(
+							"Erreur lors de la suppression de l'image:",
+							err
+						);
+					}
+				}
+			);
+
+			// Mise à jour des données
+			bookData = {
+				...JSON.parse(req.body.book),
+				imageUrl: `${req.protocol}://${req.get("host")}/images/${
+					req.file.filename
+				}`,
+			};
+		} else {
+			bookData = { ...req.body };
+		}
+		delete bookData._userId;
+
+		await Book.updateOne({ _id: req.params.id }, { ...bookData });
+		res.status(200).json({ message: "Livre mis à jour avec succès !" });
 	} catch (error) {
 		res.status(500).json({ error });
 	}
